@@ -1,5 +1,6 @@
 // Actions
 const MARK = 'MARK';
+const JUMP = 'JUMP';
 
 // Initial State
 const initialState = {
@@ -13,10 +14,6 @@ const initialState = {
 
 // Reducer
 export default function reducer(state = initialState, action) {
-  console.log("Inside reducer");
-  console.log(state);
-  console.log('action');
-  console.log(action);
   switch (action.type) {
   case MARK:
   	console.log("inside MARK");
@@ -34,7 +31,7 @@ export default function reducer(state = initialState, action) {
     }
     
     squares[action.value] = state.xIsNext ? 'X' : 'O';
-    
+
     return {
       history: history.concat([{
         squares: squares,
@@ -43,6 +40,15 @@ export default function reducer(state = initialState, action) {
       xIsNext: !state.xIsNext,
       winner: calculateWinner(squares),
     };
+  case JUMP:
+  	console.log("into jumTo");
+  	return {
+  	  history: state.history,
+  	  stepNumber: action.value,
+      xIsNext: (action.value % 2) === 0,
+      winner: null,
+  	};
+
   default: 
   	return state;
   }
@@ -51,6 +57,10 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 export function markSquare(sqr) {
   return { type: MARK, value: sqr };
+}
+
+export function jumpTo(val) {
+  return { type: JUMP, value: val };
 }
 
 function calculateWinner(squares) {

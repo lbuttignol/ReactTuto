@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { markSquare } from './reducer';
+import { markSquare, jumpTo } from './reducer';
 import Board from './Board';
 
 class Game extends React.Component {
-  jumpTo(step) {
+  // jumpTo(step) {
     // this.setState({
     //   stepNumber: step,
     //   xIsNext: (step % 2) === 0,
     // });
-  }
+  // }
   
   render() {
     const state = this.props.allState;
@@ -24,7 +24,7 @@ class Game extends React.Component {
       return (
         // adding move id
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button onClick={() => this.props.jumpTo(move)}>{desc}</button>
         </li>
       );
     });
@@ -62,6 +62,6 @@ const mapStateToProps = (state) =>{
 };
 
 // this is to add the function in the props
-const mapDispatchToProps = { markSquare };
+const mapDispatchToProps = { markSquare,jumpTo };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
