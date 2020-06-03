@@ -16,17 +16,17 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
   case MARK:
-  	console.log("inside MARK");
+    console.log("inside MARK");
     const history = state.history.slice(0, state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     
     if (calculateWinner(squares) || squares[action.value]) {
       return {
-      	history: state.history,
-      	stepNumber: state.stepNumber,
-      	xIsNext: state.xIsNext,
-      	winner: calculateWinner(squares),
+        history: state.history,
+        stepNumber: state.stepNumber,
+        xIsNext: state.xIsNext,
+        winner: calculateWinner(squares),
       };
     }
     
@@ -41,16 +41,16 @@ export default function reducer(state = initialState, action) {
       winner: calculateWinner(squares),
     };
   case JUMP:
-  	console.log("into jumTo");
-  	return {
-  	  history: state.history,
-  	  stepNumber: action.value,
+    console.log("into jumTo");
+    return {
+      history: state.history,
+      stepNumber: action.value,
       xIsNext: (action.value % 2) === 0,
       winner: null,
-  	};
+    };
 
   default: 
-  	return state;
+    return state;
   }
 }
 
