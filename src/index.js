@@ -9,7 +9,7 @@ import Game from './Game';
 // import * as reducers from './reducer';
 import ticTacToe from './reducer';
 
-import './index.css';
+import '../styles/index.css';
 
 const store = createStore(ticTacToe);
 
