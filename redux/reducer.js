@@ -30,6 +30,8 @@ export default function reducer(state = initialState, action) {
       loading: action.payload
     };
   case MARK:
+    // See how to update here!
+    
     const history = state.history.slice(0, state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
@@ -66,18 +68,34 @@ export default function reducer(state = initialState, action) {
 }
 
 // Action Creators
-export function markSquare(sqr) {
-  return { type: MARK, payload: sqr };
-}
-
 export function generateGame() {
   return async (dispatch, getState) => {
     dispatch({type: LOADING, payload: true});
     const res = await fetch('http://localhost:3000/api/game');
     const json = await res.json();
     dispatch({type: START, payload: json.gameId});
+  };
+}
+
+export function doPlay(game,sqr){
+  return async (dispatch,gameState) => {
+    dispatch({type: LOADING, payload: true});
+    const rq = {
+      method: "post",
+      body: {
+        gameId: game
+      }
+    }
+    const res = await fetch('http://localhost:3000/api/mark'+sqr,rq);
+    const json = await res.json();
+    dispatch({type: MARK, payload: json});
+
     dispatch({type: LOADING, payload: false});
-  }
+  };
+}
+
+export function markSquare(sqr) {
+  return { type: MARK, payload: sqr };
 }
 
 export function jumpTo(val) {
