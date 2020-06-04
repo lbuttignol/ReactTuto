@@ -1,10 +1,12 @@
 // Actions
 const MARK = 'MARK';
+const START = 'START';
 const JUMP = 'JUMP';
 const LOADING = 'LOADING';
 
 // Initial State
 const initialState = {
+  id: null,
   history: [{
     squares: Array(9).fill(null),
   }],
@@ -17,6 +19,11 @@ const initialState = {
 // Reducer
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+  case START:
+    return {
+      ...state,
+      id: action.payload
+    };
   case LOADING:
     return {
       ...state,
@@ -61,6 +68,16 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 export function markSquare(sqr) {
   return { type: MARK, payload: sqr };
+}
+
+export function generateGame() {
+  return async (dispatch, getState) => {
+    dispatch({type: LOADING, payload: true});
+    const res = await fetch('http://localhost:3000/api/game');
+    const json = await res.json();
+    dispatch({type: START, payload: json.gameId});
+    dispatch({type: LOADING, payload: false});
+  }
 }
 
 export function jumpTo(val) {

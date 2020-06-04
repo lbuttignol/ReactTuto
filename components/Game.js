@@ -1,10 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { markSquare, jumpTo } from '../redux/reducer';
+import { markSquare, jumpTo, generateGame } from '../redux/reducer';
 import Board from './Board';
 
 function Game () {
 
   const dispatch = useDispatch();
+  const id = useSelector(state => state.id);
   const history = useSelector(state => state.history);
   const stepNumber = useSelector(state => state.stepNumber); 
   const current = history[stepNumber];
@@ -40,8 +41,12 @@ function Game () {
         />
       </div>
       <div className="game-info">
+        <div>{ id }</div>
         <div>{ status }</div>
         <ol>{ moves }</ol>
+        <div>
+          <button onClick={() => dispatch(generateGame()) }>GENERATE GAME ID</button>
+        </div>
       </div>
     </div>
   );
