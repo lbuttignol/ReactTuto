@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { markSquare, jumpTo } from '../redux/reducer';
 import Board from './Board';

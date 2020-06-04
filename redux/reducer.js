@@ -19,19 +19,17 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
   case LOADING:
     return {
+      ...state,
       loading: action.payload
-    }
+    };
   case MARK:
-    console.log("inside MARK");
     const history = state.history.slice(0, state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     
     if (calculateWinner(squares) || squares[action.payload]) {
       return {
-        history: state.history,
-        stepNumber: state.stepNumber,
-        xIsNext: state.xIsNext,
+        ...state,
         winner: calculateWinner(squares),
       };
     }
@@ -39,6 +37,7 @@ export default function reducer(state = initialState, action) {
     squares[action.payload] = state.xIsNext ? 'X' : 'O';
 
     return {
+      ...state,
       history: history.concat([{
         squares: squares,
       }]),
@@ -47,9 +46,8 @@ export default function reducer(state = initialState, action) {
       winner: calculateWinner(squares),
     };
   case JUMP:
-    console.log("into jumTo");
     return {
-      history: state.history,
+      ...state,
       stepNumber: action.payload,
       xIsNext: (action.payload % 2) === 0,
       winner: null,
@@ -64,15 +62,6 @@ export default function reducer(state = initialState, action) {
 export function markSquare(sqr) {
   return { type: MARK, payload: sqr };
 }
-// export function markSquare(sqr) {
-//   return async (dispatch, getState) => {
-//      dispatch({type: LOADING, payload: true});
-//      // const uiid = getState().game.uiid;
-//      const res = await fetch('/api/mark', { body: JSON.stringify({ uiid, sqr }) });
-//      dispatch({type: MARK, payload: res.body});
-//      dispatch({type: LOADING, payload: false});
-//   }
-// }
 
 export function jumpTo(val) {
   return { type: JUMP, payload: val };
