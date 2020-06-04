@@ -1,6 +1,7 @@
 // Actions
 const MARK = 'MARK';
 const JUMP = 'JUMP';
+const LOADING = 'LOADING';
 
 // Initial State
 const initialState = {
@@ -10,18 +11,23 @@ const initialState = {
   stepNumber: 0,
   xIsNext: true,
   winner: null,
+  loading: false,
 }
 
 // Reducer
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+  case LOADING:
+    return {
+      loading: action.payload
+    }
   case MARK:
     console.log("inside MARK");
     const history = state.history.slice(0, state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     
-    if (calculateWinner(squares) || squares[action.value]) {
+    if (calculateWinner(squares) || squares[action.payload]) {
       return {
         history: state.history,
         stepNumber: state.stepNumber,
@@ -30,7 +36,7 @@ export default function reducer(state = initialState, action) {
       };
     }
     
-    squares[action.value] = state.xIsNext ? 'X' : 'O';
+    squares[action.payload] = state.xIsNext ? 'X' : 'O';
 
     return {
       history: history.concat([{
@@ -44,8 +50,8 @@ export default function reducer(state = initialState, action) {
     console.log("into jumTo");
     return {
       history: state.history,
-      stepNumber: action.value,
-      xIsNext: (action.value % 2) === 0,
+      stepNumber: action.payload,
+      xIsNext: (action.payload % 2) === 0,
       winner: null,
     };
 
@@ -56,11 +62,24 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 export function markSquare(sqr) {
-  return { type: MARK, value: sqr };
+  return { type: MARK, payload: sqr };
 }
+// export function markSquare(sqr) {
+//   return async (dispatch, getState) => {
+//      dispatch({type: LOADING, payload: true});
+//      // const uiid = getState().game.uiid;
+//      const res = await fetch('/api/mark', { body: JSON.stringify({ uiid, sqr }) });
+//      dispatch({type: MARK, payload: res.body});
+//      dispatch({type: LOADING, payload: false});
+//   }
+// }
 
 export function jumpTo(val) {
-  return { type: JUMP, value: val };
+  return { type: JUMP, payload: val };
+}
+
+export function loading(val) {
+  return { type: LOADING, payload: val };
 }
 
 function calculateWinner(squares) {

@@ -1,12 +1,11 @@
-import React from 'react';
+import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { markSquare, jumpTo } from '../redux/reducer';
 import Board from './Board';
 
 function Game () {
-  
+
   const dispatch = useDispatch();
-  // const state = useSelector(state => state);
   const history = useSelector(state => state.history);
   const stepNumber = useSelector(state => state.stepNumber); 
   const current = history[stepNumber];

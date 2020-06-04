@@ -1,22 +1,21 @@
-import App from 'next/app';
 import { Provider } from 'react-redux';
-import React from 'react';
+import { useStore } from '../redux/store'
 import Game from '../components/Game';
-import { createStore } from 'redux';
-import ticTacToe from '../redux/reducer';
 import '../styles/index.css';
+import Link from 'next/link'
 
-const store = createStore(ticTacToe);
+export default function App({Component, pageProps}) {
 
-class MyApp extends App {
+  const store = useStore(pageProps.initialReduxState)
 
-  render(){
-    return (
+  return (
+    <>
       <Provider store={store}>
-        <Game />
+        <Component {...pageProps} />
       </Provider>
-    );
-  };
+      <Link href="/show-redux-state">
+          <a>Click to see current Redux State</a>
+      </Link>
+    </>
+  );
 }
-
-export default MyApp;
