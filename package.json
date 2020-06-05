@@ -20,7 +20,7 @@
     "uuid": "^8.1.0"
   },
   "scripts": {
-    "dev": "node ./db/createDbTest.js && next",
+    "dev": "node ./db/createDb.js && next",
     "build": "next build",
     "start": "next start"
   },
