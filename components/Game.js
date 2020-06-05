@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { markSquare, jumpTo, generateGame } from '../redux/reducer';
+import { markSquare, jumpTo, generateGame, doPlay } from '../redux/reducer';
 import Board from './Board';
 
 function Game () {
@@ -37,16 +37,18 @@ function Game () {
       <div className="game-board">
         <Board
           squares={current.squares}
-          onClick={(i) => dispatch(markSquare(i))}
+          onClick={(i) => dispatch(doPlay(i))}
         />
       </div>
       <div className="game-info">
         <div>{ id }</div>
         <div>{ status }</div>
-        <ol>{ moves }</ol>
+        <ol>{ moves }</ol>        
+
         <div>
           <button onClick={() => dispatch(generateGame()) }>GENERATE GAME ID</button>
         </div>
+   
       </div>
     </div>
   );
