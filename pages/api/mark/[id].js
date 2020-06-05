@@ -18,7 +18,12 @@ export default async (req, res) => {
   const squares = board.squares.slice();
 
   if (calculateWinner(squares) ) {
-    res.json({winner: calculateWinner(squares) });
+    res.json({
+      winner: calculateWinner(squares),
+      stepNumber: state.stepNumber,
+      xIsNext: state.xIsNext,
+      newBoard: squares 
+    });
   }
 
   squares[id] = state.xIsNext ? 'X' : 'O';
