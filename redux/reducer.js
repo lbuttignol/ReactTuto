@@ -31,8 +31,6 @@ export default function reducer(state = initialState, action) {
     };
   case MARK:
     // See how to update here!
-    console.log("action.payload");
-    console.log(action.payload);
     const history = state.history;
     return {
       ...state,
@@ -62,6 +60,7 @@ export function generateGame() {
     dispatch({type: LOADING, payload: true});
     const res = await fetch('http://localhost:3000/api/game');
     const json = await res.json();
+    
     dispatch({type: START, payload: json.gameId});
     dispatch({type: LOADING, payload: false});
   };
