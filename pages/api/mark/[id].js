@@ -11,7 +11,7 @@ export default async (req, res) => {
   // Return game
 
   const db = await sqlite.open('./mydb.sqlite');
-  const people = await db.all('select * from person');
+  const game = await db.all('select * from Game');
 
-  res.json(people);
+  res.json(game);
 }

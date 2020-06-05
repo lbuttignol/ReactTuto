@@ -1,24 +1,11 @@
 -- Up
-CREATE TABLE Person (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    email TEXT
+CREATE TABLE Game (
+    id TEXT PRIMARY KEY NOT NULL,
+    play TEXT
 );
 
-CREATE TABLE Vehicle (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    brand TEXT,
-    model TEXT,
-    ownerId INTEGER REFERENCES Person(id)
-);
-
-INSERT INTO Person (name, email) values ('bruno', 'bruno@antunes.pt');
-INSERT INTO Person (name, email) values ('jack', 'jack@antunes.pt');
-
-INSERT INTO Vehicle (brand, model, ownerId) values('audi', 'R8', 1);
-INSERT INTO Vehicle (brand, model, ownerId) values('audi', 'R6', 1);
-INSERT INTO Vehicle (brand, model, ownerId) values('mercedes', 'benz', 2);
+INSERT INTO Game (id, play) values ('blabla', ' , , , , , , , , ');
+INSERT INTO Game (id, play) values ('blablabla', 'X,O,X, , , , , , ');
 
 -- Down
-DROP TABLE Person;
-DROP TABLE Vehicle;
+DROP TABLE Game;
