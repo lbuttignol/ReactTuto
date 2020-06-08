@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     8: DataTypes.STRING
   }, {});
   Board.associate = function(models) {
-    // associations can be defined here
+    // Belongs to a Game
+    Board.belongsTo(models.Game);
   };
   return Board;
 };

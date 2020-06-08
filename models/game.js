@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     winner: DataTypes.STRING
   }, {});
   Game.associate = function(models) {
-    // associations can be defined here
+    // has many Boards
+    Game.hasMany(models.Board);
   };
   return Game;
 };
