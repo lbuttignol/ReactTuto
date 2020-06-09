@@ -1,5 +1,6 @@
 -- Up
-CREATE TABLE Game (
+
+CREATE TABLE IF NOT EXISTS Game (
   id TEXT PRIMARY KEY NOT NULL,
   xIsNext BOOLEAN DEFAULT true,
   winner STRING DEFAULT null,
@@ -7,7 +8,7 @@ CREATE TABLE Game (
   FOREIGN KEY (current) REFERENCES Board(id)
 );
 
-CREATE TABLE Board (
+CREATE TABLE IF NOT EXISTS Board (
   id TEXT PRIMARY KEY,
   cell0 STRING DEFAULT null,
   cell1 STRING DEFAULT null,
@@ -21,7 +22,3 @@ CREATE TABLE Board (
   gameID TEXT,
   FOREIGN KEY (gameID) REFERENCES Game(id) 
 );
-
--- Down
-DROP TABLE Game;
-DROP TABLE Board;
