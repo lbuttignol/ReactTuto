@@ -29,11 +29,10 @@ export default function reducer(state = initialState, action) {
     };
   case MARK:
     // See how to update here!
-    const history = state.history;
     return {
       ...state,
       current: action.payload.newBoard,
-      stepNumber: history.length,
+      stepNumber: action.payload.stepNumber,
       xIsNext: action.payload.xIsNext,
       winner: action.payload.winner
     };

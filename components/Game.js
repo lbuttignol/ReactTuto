@@ -6,23 +6,23 @@ function Game () {
 
   const dispatch = useDispatch();
   const id = useSelector(state => state.id);
-  const history = useSelector(state => state.history);
   const stepNumber = useSelector(state => state.stepNumber); 
-  const current = history[stepNumber];
+  const current = useSelector(state => state.current);
   const winner = useSelector(state =>state.winner);
   const xIsNext = useSelector(state => state.xIsNext);
 
-  const moves = history.map((step, move) => {
-    const desc = move ?
-      'Go to move #' + move :
-      'Go to game start';
-    return (
-      // adding move id
-      <li key={move}>
-        <button onClick={() => dispatch(jumpTo(move)) }>{desc}</button>
-      </li>
-    );
-  });
+  const moves = () =>{
+    if (stepNumber >= 1){
+      return (
+        <li key={stepNumber - 1}>
+          <button onClick={() => dispatch(jumpTo(stepNumber - 1)) }>Undo Move</button>
+        </li>
+      );
+    }else{
+      return null;
+    }
+  }
+
 
   let status;
 
@@ -36,7 +36,7 @@ function Game () {
     <div className="game">
       <div className="game-board">
         <Board
-          squares={current.squares}
+          squares={current}
           onClick={(i) => dispatch(doPlay(i))}
         />
       </div>
