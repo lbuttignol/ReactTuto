@@ -3,11 +3,9 @@ import Promise from 'bluebird';
 
 class Database{  
   constructor() {
-    this.db = new sqlite3.Database('./mydb.sqlite', (err) => {
+    this.db = new sqlite3.Database( process.env.DB_NAME, (err) => {
       if (err) {
         console.log('Could not connect to database', err)
-      } else {
-        console.log('Connected to database')
       }
     })
   }
@@ -58,7 +56,6 @@ class Database{
           console.log("Error closing Database")
           reject(err);
         }else{
-          console.log('Database Disconnectd')
           resolve();
         }
       })
