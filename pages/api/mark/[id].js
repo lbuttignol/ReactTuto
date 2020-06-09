@@ -12,7 +12,7 @@ export default async (req, res) => {
   
   const gameId = req.body.gameId;
   const db = await sqlite.open('./mydb.sqlite');
-  const game = await db.all('select * from Game where id=?',gameId);
+  const game = await db.all('SELECT * FROM Game WHERE id=?',gameId);
 
   const board = await db.all('SELECT * FROM Board WHERE id = ?',game[0].current);
   const count = await db.all('SELECT count(*) as stepNumber FROM Board WHERE gameId = ?',[gameId]);
@@ -31,7 +31,6 @@ export default async (req, res) => {
   squares[8] = board[0].cell8; 
 
 
-  console.log(squares);
   const winner = calculateWinner(squares);
   // Second value check if the cell is already marked
   if (winner || squares[id]) {
@@ -43,10 +42,8 @@ export default async (req, res) => {
     });
   }
 
-  console.log("before mark",squares);
   // New board 
   squares[id] = whoPlayNext(stepNumber);
-  console.log("after mark",squares);
   const boardId = uuidv4();
   await db.run('INSERT INTO Board VALUES (?,?,?,?,?,?,?,?,?,?,?)',[
     boardId,
@@ -63,7 +60,6 @@ export default async (req, res) => {
 
   // Insert Relationship
   await db.run('UPDATE Game SET current = ? WHERE id = ?',[boardId,gameId]);
-  
   await db.close();
 
 
