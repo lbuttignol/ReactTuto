@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { markSquare, jumpTo, generateGame, doPlay } from '../redux/reducer';
+import { undoMove, generateGame, doPlay } from '../redux/reducer';
 import Board from './Board';
 
 function Game () {
@@ -15,7 +15,7 @@ function Game () {
     if (stepNumber >= 1){
       return (
         <li key={stepNumber - 1}>
-          <button onClick={() => dispatch(jumpTo(stepNumber - 1)) }>Undo Move</button>
+          <button onClick={() => dispatch(undoMove()) }>Undo Move</button>
         </li>
       );
     }else{

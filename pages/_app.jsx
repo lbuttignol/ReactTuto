@@ -9,13 +9,8 @@ export default function App({Component, pageProps}) {
   const store = useStore(pageProps.initialReduxState)
 
   return (
-    <>
-      <Provider store={store}>
-        <Component {...pageProps} />
-      </Provider>
-      <Link href="/show-redux-state">
-          <a>Click to see current Redux State</a>
-      </Link>
-    </>
+    <Provider store={store}>
+      <Component {...pageProps} />
+    </Provider>
   );
 }
