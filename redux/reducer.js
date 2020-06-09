@@ -1,7 +1,7 @@
 // Actions
 const MARK = 'MARK';
 const START = 'START';
-const JUMP = 'JUMP';
+const UNDO = 'UNDO';
 const LOADING = 'LOADING';
 
 // Initial State
@@ -18,10 +18,9 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
   case START:
-    return {
-      ...state,
-      id: action.payload
-    };
+    const res = initialState;
+    res.id = action.payload;
+    return res;
   case LOADING:
     return {
       ...state,
@@ -36,7 +35,7 @@ export default function reducer(state = initialState, action) {
       xIsNext: action.payload.xIsNext,
       winner: action.payload.winner
     };
-  case JUMP:
+  case UNDO:
     return {
       ...state,
       stepNumber: action.payload,
@@ -80,14 +79,33 @@ export function doPlay(sqr){
   };
 }
 
+export function undoMove(){
+  return async (dispatch,getState) => {
+    dispatch({type: LOADING, payload: true});
+    const req = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "post",
+      body: JSON.stringify({ gameId: getState().id })
+    }
+    const res = await fetch('http://localhost:3000/api/undo',req);
+    const json = await res.json();
+
+    dispatch({type: UNDO, payload: json });
+    dispatch({type: LOADING, payload: false});
+  }
+}
+
 // add function load game
 
 export function markSquare(sqr) {
   return { type: MARK, payload: sqr };
 }
 
-export function jumpTo(val) {
-  return { type: JUMP, payload: val };
+export function undo(val) {
+  return { type: UNDO, payload: val };
 }
 
 export function loading(val) {

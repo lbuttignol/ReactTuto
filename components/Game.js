@@ -11,17 +11,8 @@ function Game () {
   const winner = useSelector(state =>state.winner);
   const xIsNext = useSelector(state => state.xIsNext);
 
-  const moves = () =>{
-    if (stepNumber >= 1){
-      return (
-        <li key={stepNumber - 1}>
-          <button onClick={() => dispatch(undoMove()) }>Undo Move</button>
-        </li>
-      );
-    }else{
-      return null;
-    }
-  }
+
+
 
 
   let status;
@@ -43,10 +34,13 @@ function Game () {
       <div className="game-info">
         <div>{ id }</div>
         <div>{ status }</div>
-        <ol>{ moves }</ol>        
 
         <div>
           <button onClick={() => dispatch(generateGame()) }>GENERATE GAME ID</button>
+        </div>
+        
+        <div>
+          <button onClick={() => dispatch(undoMove()) }>Undo Move</button>
         </div>
    
       </div>
