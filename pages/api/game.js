@@ -1,24 +1,22 @@
 import { v4 as uuidv4 } from 'uuid';
-import sqlite from 'sqlite';
+import Database from '../../db/database';
 
 export default async (req, res) => {
 
   const gId = await createGame();
-  console.log(gId);
   res.status(200).json({gameId: gId});
 }
 
 async function createGame(){
   const gameId = uuidv4();
-  console.log(gameId);
   const boardId = uuidv4();
 
-  const db = await sqlite.open('./mydb.sqlite');
+  const db = new Database();
   
   // insert Game
-  await db.run(`INSERT INTO Game ( id ) VALUES ( ? )`,[gameId]);
+  await db.run(`INSERT INTO Game (id) VALUES ( ? )`,[gameId]);
   // insert Board
-  await db.run(`INSERT INTO Board ( id, gameId ) VALUES ( ?, ? )`,[boardId,gameId])
+  await db.run(`INSERT INTO Board ( id, gameId ) VALUES ( ?, ? )`,[boardId,gameId]);
   // Insert Relationship
   await db.run(`UPDATE Game SET current = ? WHERE id = ?`,[boardId,gameId]);
   
