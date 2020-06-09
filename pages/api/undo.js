@@ -1,28 +1,29 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { markSquare, jumpTo } from '../../redux/reducer';
-import sqlite from 'sqlite';
+import Database from '../../db/database';
 
 export default async (req, res) => {
 
   const gameId = req.body.gameId;
   // search into database the game id
-  const db = await sqlite.open('./mydb.sqlite');
-  const game = await db.all('SELECT * FROM Game WHERE id=?',gameId);
+  const db = new Database();
+  const game = await db.get('SELECT * FROM Game WHERE id=?',gameId);
+
+  if(!game){
+    return res.status(404).json({ message: "Game not Found" });
+  }
 
   const boards = await db.all('SELECT * FROM Board WHERE gameId = ?',[gameId]);
 
   if (boards.length < 1){
-    // See error code 
-    return res.status(200).json({});
+    return res.status(200).json({ message: "Can't undo an empty board" });
   }
-  
 
-  const boardToDelete = game[0].current;
+  const boardToDelete = game.current;
   const newBoard      = boards[boards.length - 2];
   const stepNumber    = boards.length - 1;
-  const xIsNext       = !game[0].xIsNext;
+  const xIsNext       = !game.xIsNext;
   const winner        = null;
-
 
   const brd =[
     newBoard.cell0,
