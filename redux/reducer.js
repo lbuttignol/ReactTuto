@@ -38,9 +38,12 @@ export default function reducer(state = initialState, action) {
   case UNDO:
     return {
       ...state,
-      stepNumber: action.payload,
-      xIsNext: (action.payload % 2) === 0,
-      winner: null
+
+
+      current: action.payload.newBoard,
+      stepNumber: action.payload.stepNumber,
+      xIsNext: action.payload.xIsNext,
+      winner: action.payload.winner
     };
 
   default: 
