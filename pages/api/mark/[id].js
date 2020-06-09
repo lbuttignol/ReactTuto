@@ -1,5 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { markSquare, jumpTo } from '../../../redux/reducer'
+import { v4 as uuidv4 } from 'uuid';
+
 import sqlite from 'sqlite';
 
 export default async (req, res) => {
@@ -8,42 +10,67 @@ export default async (req, res) => {
   } = req
   // search into database the game id
   
-  const state = req.body.state;
+  const gameId = req.body.gameId;
   const db = await sqlite.open('./mydb.sqlite');
-  const game = await db.all('select * from Game where id=?',state.id);
+  const game = await db.all('select * from Game where id=?',gameId);
 
-  const history = state.history;
-  const board = history[history.length - 1];
+  const board = await db.all('SELECT * FROM Board WHERE id = ?',game[0].current);
+  const count = await db.all('SELECT count(*) as stepNumber FROM Board WHERE gameId = ?',[gameId]);
+  const stepNumber = count[0].stepNumber
 
-  const squares = board.squares.slice();
+  // See how to improve with a for loop or a map function
+  var squares = [];
+  squares[0] = board[0].cell0; 
+  squares[1] = board[0].cell1; 
+  squares[2] = board[0].cell2; 
+  squares[3] = board[0].cell3; 
+  squares[4] = board[0].cell4; 
+  squares[5] = board[0].cell5; 
+  squares[6] = board[0].cell6; 
+  squares[7] = board[0].cell7; 
+  squares[8] = board[0].cell8; 
 
-  if (calculateWinner(squares) ) {
-    res.json({
-      winner: calculateWinner(squares),
-      stepNumber: state.stepNumber,
-      xIsNext: state.xIsNext,
+
+  console.log(squares);
+  const winner = calculateWinner(squares);
+  // Second value check if the cell is already marked
+  if (winner || squares[id]) {
+    return res.json({
+      winner: winner,
+      stepNumber: stepNumber,
+      xIsNext: whoPlayNext(stepNumber),
       newBoard: squares 
     });
   }
 
-  squares[id] = state.xIsNext ? 'X' : 'O';
+  console.log("before mark",squares);
+  // New board 
+  squares[id] = whoPlayNext(stepNumber);
+  console.log("after mark",squares);
+  const boardId = uuidv4();
+  await db.run('INSERT INTO Board VALUES (?,?,?,?,?,?,?,?,?,?,?)',[
+    boardId,
+    squares[0],
+    squares[1],
+    squares[2],
+    squares[3],
+    squares[4],
+    squares[5],
+    squares[6],
+    squares[7],
+    squares[8],
+    gameId]);
+
+  // Insert Relationship
+  await db.run('UPDATE Game SET current = ? WHERE id = ?',[boardId,gameId]);
   
-  // INSERT INTO DATABASE THE NEW BOARD
-  const boardRepresentation = squares.map((x) =>{
-      if ( x == null){
-        return ' ';
-      }
-      return x;
-    }).join(',');
-
-
-  await db.run("INSERT OR REPLACE INTO Game VALUES (?,?)", [state.id,boardRepresentation] );
   await db.close();
+
 
   res.json({
     winner: calculateWinner(squares),
-    stepNumber: state.stepNumber + 1,
-    xIsNext: !state.xIsNext,
+    stepNumber: stepNumber + 1,
+    xIsNext: whoPlayNext(stepNumber+1),
     newBoard: squares
   });
 
@@ -68,4 +95,8 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function whoPlayNext(step){
+  return step % 2 ? 'X' : 'O';
 }

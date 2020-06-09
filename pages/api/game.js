@@ -11,7 +11,7 @@ export default async (req, res) => {
   const xIsNext = true;
   const winner = null;
   // insert Game
-  await db.run('INSERT INTO Game VALUES (?,?,?,?,?)',[gameId,xIsNext,winner,null]);
+  await db.run('INSERT INTO Game VALUES (?,?,?,?)',[gameId,xIsNext,winner,null]);
   // insert Board
   const result = await db.run('INSERT INTO Board VALUES (?,?,?,?,?,?,?,?,?,?,?)',[boardId,null,null,null,null,null,null,null,null,null,gameId])
   // Insert Relationship

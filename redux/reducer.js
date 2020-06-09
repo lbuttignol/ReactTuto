@@ -7,9 +7,7 @@ const LOADING = 'LOADING';
 // Initial State
 const initialState = {
   id: null,
-  history: [{
-    squares: Array(9).fill(null),
-  }],
+  current: Array(9).fill(null),
   stepNumber: 0,
   xIsNext: true,
   winner: null,
@@ -34,9 +32,7 @@ export default function reducer(state = initialState, action) {
     const history = state.history;
     return {
       ...state,
-      history: history.concat([{
-        squares: action.payload.newBoard,
-      }]),
+      current: action.payload.newBoard,
       stepNumber: history.length,
       xIsNext: action.payload.xIsNext,
       winner: action.payload.winner
@@ -69,21 +65,23 @@ export function generateGame() {
 export function doPlay(sqr){
   return async (dispatch,getState) => {
     dispatch({type: LOADING, payload: true});
-    const rq = {
+    const req = {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       method: "post",
-      body: JSON.stringify({ state: getState() })
+      body: JSON.stringify({ gameId: getState().id })
     }
-    const res = await fetch('http://localhost:3000/api/mark/'+sqr,rq);
+    const res = await fetch('http://localhost:3000/api/mark/'+sqr,req);
     const json = await res.json();
 
     dispatch({type: MARK, payload: json });
     dispatch({type: LOADING, payload: false});
   };
 }
+
+// add function load game
 
 export function markSquare(sqr) {
   return { type: MARK, payload: sqr };
