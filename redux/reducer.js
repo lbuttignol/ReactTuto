@@ -54,10 +54,9 @@ export function generateGame() {
   return async (dispatch, getState) => {
     dispatch({ type: LOADING, payload: true });
     
-    const res = await fetch('http://localhost:3000/api/game');
-    const json = await res.json();
+    const newState = await apiFetch('get', 'http://localhost:3000/api/game');
     
-    dispatch({ type: START, payload: json.gameId });
+    dispatch({ type: START, payload: newState.gameId });
     dispatch({ type: LOADING, payload: false });
   };
 }
@@ -65,18 +64,10 @@ export function generateGame() {
 export function doPlay(sqr){
   return async (dispatch,getState) => {
     dispatch({ type: LOADING, payload: true });
-    const req = {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: "post",
-      body: JSON.stringify({ gameId: getState().id })
-    }
-    const res = await fetch('http://localhost:3000/api/mark/'+sqr,req);
-    const json = await res.json();
+    // if gameId == null create game
+    const newState = await apiFetch('post', 'http://localhost:3000/api/mark/' + sqr, { gameId: getState().id } );
 
-    dispatch({ type: MARK, payload: json });
+    dispatch({ type: MARK, payload: newState });
     dispatch({ type: LOADING, payload: false });
   };
 }
@@ -84,18 +75,10 @@ export function doPlay(sqr){
 export function undoMove(){
   return async (dispatch,getState) => {
     dispatch({ type: LOADING, payload: true });
-    const req = {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: "post",
-      body: JSON.stringify({ gameId: getState().id })
-    }
-    const res = await fetch('http://localhost:3000/api/undo',req);
-    const json = await res.json();
 
-    dispatch({ type: UNDO, payload: json });
+    const newState = await apiFetch('post','http://localhost:3000/api/undo', { gameId: getState().id });
+
+    dispatch({ type: UNDO, payload: newState });
     dispatch({ type: LOADING, payload: false });
   }
 }
@@ -112,4 +95,24 @@ export function undo(val) {
 
 export function loading(val) {
   return { type: LOADING, payload: val };
+}
+
+async function apiFetch(method, url, body){
+  method = method || 'get';
+  body = body || {};
+  
+  let req = {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: method,
+  }
+  
+  if(method != "get"){
+    req.body = JSON.stringify(body)
+  }
+
+  const result = await fetch(url,req);
+  return await result.json();
 }

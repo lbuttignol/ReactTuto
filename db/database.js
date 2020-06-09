@@ -59,6 +59,7 @@ class Database{
           console.log("Error closing Database")
           reject(err);
         }else{
+          console.log('Database Disconnectd')
           resolve();
         }
       })
