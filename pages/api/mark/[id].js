@@ -69,7 +69,7 @@ export default async (req, res) => {
   res.status(200).json({
     winner: calculateWinner(squares),
     stepNumber: stepNumber + 1,
-    xIsNext: whoPlayNext(stepNumber+1),
+    xIsNext: whoPlayNext(stepNumber + 1),
     newBoard: squares
   });
 

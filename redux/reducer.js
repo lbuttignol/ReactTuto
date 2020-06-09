@@ -52,18 +52,19 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 export function generateGame() {
   return async (dispatch, getState) => {
-    dispatch({type: LOADING, payload: true});
+    dispatch({ type: LOADING, payload: true });
+    
     const res = await fetch('http://localhost:3000/api/game');
     const json = await res.json();
     
-    dispatch({type: START, payload: json.gameId});
-    dispatch({type: LOADING, payload: false});
+    dispatch({ type: START, payload: json.gameId });
+    dispatch({ type: LOADING, payload: false });
   };
 }
 
 export function doPlay(sqr){
   return async (dispatch,getState) => {
-    dispatch({type: LOADING, payload: true});
+    dispatch({ type: LOADING, payload: true });
     const req = {
       headers: {
         'Accept': 'application/json',
@@ -75,14 +76,14 @@ export function doPlay(sqr){
     const res = await fetch('http://localhost:3000/api/mark/'+sqr,req);
     const json = await res.json();
 
-    dispatch({type: MARK, payload: json });
-    dispatch({type: LOADING, payload: false});
+    dispatch({ type: MARK, payload: json });
+    dispatch({ type: LOADING, payload: false });
   };
 }
 
 export function undoMove(){
   return async (dispatch,getState) => {
-    dispatch({type: LOADING, payload: true});
+    dispatch({ type: LOADING, payload: true });
     const req = {
       headers: {
         'Accept': 'application/json',
@@ -94,8 +95,8 @@ export function undoMove(){
     const res = await fetch('http://localhost:3000/api/undo',req);
     const json = await res.json();
 
-    dispatch({type: UNDO, payload: json });
-    dispatch({type: LOADING, payload: false});
+    dispatch({ type: UNDO, payload: json });
+    dispatch({ type: LOADING, payload: false });
   }
 }
 
