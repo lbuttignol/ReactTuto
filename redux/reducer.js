@@ -18,32 +18,30 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
   case START:
-    const res = initialState;
-    res.id = action.payload;
-    return res;
+    return {
+      ...initialState,
+      id: action.payload
+    };
   case LOADING:
     return {
       ...state,
       loading: action.payload
     };
   case MARK:
-    // See how to update here!
     return {
       ...state,
-      current: action.payload.newBoard,
+      current   : action.payload.newBoard,
       stepNumber: action.payload.stepNumber,
-      xIsNext: action.payload.xIsNext,
-      winner: action.payload.winner
+      xIsNext   : action.payload.xIsNext,
+      winner    : action.payload.winner
     };
   case UNDO:
     return {
       ...state,
-
-
-      current: action.payload.newBoard,
+      current   : action.payload.newBoard,
       stepNumber: action.payload.stepNumber,
-      xIsNext: action.payload.xIsNext,
-      winner: action.payload.winner
+      xIsNext   : action.payload.xIsNext,
+      winner    : action.payload.winner
     };
 
   default: 
