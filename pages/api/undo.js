@@ -7,13 +7,13 @@ export default async (req, res) => {
   const gameId = req.body.gameId;
   // search into database the game id
   const db = new Database();
-  const game = await db.get('SELECT * FROM Game WHERE id=?',gameId);
+  const game = await db.get('SELECT * FROM Game WHERE id=?', gameId);
 
   if(!game){
     return res.status(404).json({ message: "Game not Found" });
   }
 
-  const boards = await db.all('SELECT * FROM Board WHERE gameId = ?',[gameId]);
+  const boards = await db.all('SELECT * FROM Board WHERE gameId = ?', [gameId]);
 
   if (boards.length < 1){
     return res.status(200).json({ message: "Can't undo an empty board" });
@@ -25,19 +25,14 @@ export default async (req, res) => {
   const xIsNext       = !game.xIsNext;
   const winner        = null;
 
-  const brd =[
-    newBoard.cell0,
-    newBoard.cell1,
-    newBoard.cell2,
-    newBoard.cell3,
-    newBoard.cell4,
-    newBoard.cell5,
-    newBoard.cell6,
-    newBoard.cell7,
-    newBoard.cell8
-  ];
+  let brd =[];
+  // build board representation to frontend
+  for (var i = 0; i < 9; i++) {
+    const cell = 'cell' + i;
+    brd[i] = newBoard[cell];
+  }
 
-  await db.run('UPDATE Game SET current = ? WHERE id = ?',[newBoard.id,gameId]);
+  await db.run('UPDATE Game SET current = ? WHERE id = ?',[newBoard.id, gameId]);
   await db.run('DELETE FROM Board WHERE id = ?',[boardToDelete]); 
   await db.close();
   

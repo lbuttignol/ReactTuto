@@ -15,22 +15,17 @@ export default async (req, res) => {
   if(!game){
     return res.status(404).json({ message: "Game not Found" });
   }
-  const board = await db.all('SELECT * FROM Board WHERE id = ?', game.current);
+
+  const board = await db.get('SELECT * FROM Board WHERE id = ?', game.current);
   const count = await db.all('SELECT count(*) as stepNumber FROM Board WHERE gameId = ?', [gameId]);
   const stepNumber = count[0].stepNumber
 
-  // See how to improve with a for loop or a map function
   var squares = [];
-  squares[0] = board[0].cell0; 
-  squares[1] = board[0].cell1; 
-  squares[2] = board[0].cell2; 
-  squares[3] = board[0].cell3; 
-  squares[4] = board[0].cell4; 
-  squares[5] = board[0].cell5; 
-  squares[6] = board[0].cell6; 
-  squares[7] = board[0].cell7; 
-  squares[8] = board[0].cell8; 
-
+  
+  for (var i = 0; i < 9; i++) {
+    const cell = 'cell' + i;
+    squares[i] = board[cell];
+  }
 
   const winner = calculateWinner(squares);
   // Second value check if the cell is already marked
@@ -65,14 +60,12 @@ export default async (req, res) => {
   await db.run('UPDATE Game SET current = ? WHERE id = ?',[boardId,gameId]);
   await db.close();
 
-
   res.status(200).json({
     winner: calculateWinner(squares),
     stepNumber: stepNumber + 1,
     xIsNext: whoPlayNext(stepNumber + 1),
     newBoard: squares
   });
-
 }
 
 function calculateWinner(squares) {

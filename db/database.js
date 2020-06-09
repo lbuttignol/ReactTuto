@@ -32,7 +32,6 @@ class Database{
           console.log('Error running sql ', sql, err)
           reject(err)
         } else {
-          console.log("rows",rows)
           resolve(rows)
         }
       })
