@@ -11,14 +11,12 @@ async function setup() {
   })
   
   // Convert the SQL string to array so that you can run them one at a time.
-  // You can split the strings using the query delimiter i.e. `;` in // my case I used `);` because some data in the queries had `;`.
-  const dataArr = schema.toString().split(";");
+  const dataArr = schema.toString().split(';');
 
   dataArr.forEach(query => {
     if (query) {
       // Add the delimiter back to each query before you run them
-      // In my case the it was `);`
-      query += ";";
+      query += ';';
       db.run(query, err => {
         if (err) throw err;
       });
@@ -30,7 +28,7 @@ async function setup() {
     if (err) {
       return console.error(err.message);
     }
-    console.log("Closed the database connection.");
+    console.log('Closed the database connection.');
   });
 }
 

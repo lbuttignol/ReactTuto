@@ -3,20 +3,19 @@ import { markSquare, jumpTo } from '../../redux/reducer';
 import Database from '../../db/database';
 
 export default async (req, res) => {
-
   const gameId = req.body.gameId;
   // search into database the game id
   const db = new Database();
   const game = await db.get('SELECT * FROM Game WHERE id=?', gameId);
 
-  if(!game){
-    return res.status(404).json({ message: "Game not Found" });
+  if(!game) {
+    return res.status(404).json({ message: 'Game not Found' });
   }
 
   const boards = await db.all('SELECT * FROM Board WHERE gameId = ?', [gameId]);
 
-  if (boards.length < 1){
-    return res.status(200).json({ message: "Can't undo an empty board" });
+  if (boards.length < 1) {
+    return res.status(200).json({ message: `Can't undo an empty board` });
   }
 
   const boardToDelete = game.current;
@@ -25,15 +24,15 @@ export default async (req, res) => {
   const xIsNext       = !game.xIsNext;
   const winner        = null;
 
-  let brd =[];
+  const brd = [];
   // build board representation to frontend
-  for (var i = 0; i < 9; i++) {
+  for (let i = 0; i < 9; i++) {
     const cell = 'cell' + i;
     brd[i] = newBoard[cell];
   }
 
-  await db.run('UPDATE Game SET current = ? WHERE id = ?',[newBoard.id, gameId]);
-  await db.run('DELETE FROM Board WHERE id = ?',[boardToDelete]); 
+  await db.run('UPDATE Game SET current = ? WHERE id = ?', [newBoard.id, gameId]);
+  await db.run('DELETE FROM Board WHERE id = ?', [boardToDelete]); 
   await db.close();
   
   res.status(200).json({

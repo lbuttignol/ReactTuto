@@ -12,7 +12,7 @@ const initialState = {
   xIsNext: true,
   winner: null,
   loading: false,
-}
+};
 
 // Reducer
 export default function reducer(state = initialState, action) {
@@ -55,24 +55,23 @@ export function generateGame() {
     dispatch({ type: LOADING, payload: true });
     
     const newState = await apiFetch('get', 'http://localhost:3000/api/game');
-    
     dispatch({ type: START, payload: newState.gameId });
     dispatch({ type: LOADING, payload: false });
   };
-}
+};
 
-export function doPlay(sqr){
+export function doPlay(sqr) {
   return async (dispatch,getState) => {
     dispatch({ type: LOADING, payload: true });
     // if gameId == null create game
-    const newState = await apiFetch('post', 'http://localhost:3000/api/mark/' + sqr, { gameId: getState().id } );
+    const newState = await apiFetch('post', 'http://localhost:3000/api/mark/' + sqr, { gameId: getState().id });
 
     dispatch({ type: MARK, payload: newState });
     dispatch({ type: LOADING, payload: false });
   };
 }
 
-export function undoMove(){
+export function undoMove() {
   return async (dispatch,getState) => {
     dispatch({ type: LOADING, payload: true });
 
@@ -97,20 +96,17 @@ export function loading(val) {
   return { type: LOADING, payload: val };
 }
 
-async function apiFetch(method, url, body){
-  method = method || 'get';
-  body = body || {};
-  
-  let req = {
+async function apiFetch(method = 'get', url, body = {}) {
+  const req = {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    method: method,
+    method: method
   }
   
-  if(method != "get"){
-    req.body = JSON.stringify(body)
+  if(method != 'get') {
+    req.body = JSON.stringify(body);
   }
 
   const result = await fetch(url,req);

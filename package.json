@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "bluebird": "^3.7.2",
+    "fs": "0.0.1-security",
     "next": "^9.4.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
