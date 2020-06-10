@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import Database from '../../../db/database';
+import buildRepresentation from '../../../helpers/board';
 
 export default async (req, res) => {
   const {
@@ -18,12 +19,7 @@ export default async (req, res) => {
   const count = await db.all('SELECT count(*) as stepNumber FROM Board WHERE gameId = ?', [gameId]);
   const stepNumber = count[0].stepNumber;
 
-  const squares = [];
-  
-  for (let i = 0; i < 9; i++) {
-    const cell = 'cell' + i;
-    squares[i] = board[cell];
-  }
+  const squares = buildRepresentation(board);
 
   const winner = calculateWinner(squares);
   // Second value check if the cell is already marked

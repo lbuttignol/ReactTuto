@@ -1,4 +1,5 @@
 import Database from '../../db/database';
+import buildRepresentation from '../../helpers/board';
 
 export default async (req, res) => {
   const gameId = req.body.gameId;
@@ -22,12 +23,7 @@ export default async (req, res) => {
   const xIsNext       = !game.xIsNext;
   const winner        = null;
 
-  const brd = [];
-  // build board representation to frontend
-  for (let i = 0; i < 9; i++) {
-    const cell = 'cell' + i;
-    brd[i] = newBoard[cell];
-  }
+  const brd = buildRepresentation(newBoard);
 
   await db.run('UPDATE Game SET current = ? WHERE id = ?', [newBoard.id, gameId]);
   await db.run('DELETE FROM Board WHERE id = ?', [boardToDelete]); 
