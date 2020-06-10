@@ -113,6 +113,6 @@ async function apiFetch(method = 'get', url, body = {}) {
     req.body = JSON.stringify(body);
   }
 
-  const result = await fetch(apiHost + url,req);
+  const result = await fetch(apiHost + url, req);
   return await result.json();
 }
