@@ -19,7 +19,8 @@
     "redux-thunk": "^2.3.0",
     "redux-undo": "^1.0.1",
     "sqlite3": "^4.2.0",
-    "uuid": "^8.1.0"
+    "uuid": "^8.1.0",
+    "webpack": "^4.43.0"
   },
   "scripts": {
     "dev": "node ./db/createDb.js && next",

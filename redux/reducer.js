@@ -1,3 +1,5 @@
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 // Actions
 const MARK = 'MARK';
 const START = 'START';
@@ -54,7 +56,7 @@ export function generateGame() {
   return async (dispatch, getState) => {
     dispatch({ type: LOADING, payload: true });
     
-    const newState = await apiFetch('get', 'http://localhost:3000/api/game');
+    const newState = await apiFetch('get', '/api/game');
     dispatch({ type: START, payload: newState.gameId });
     dispatch({ type: LOADING, payload: false });
   };
@@ -64,7 +66,7 @@ export function doPlay(sqr) {
   return async (dispatch,getState) => {
     dispatch({ type: LOADING, payload: true });
     // if gameId == null create game
-    const newState = await apiFetch('post', 'http://localhost:3000/api/mark/' + sqr, { gameId: getState().id });
+    const newState = await apiFetch('post', '/api/mark/' + sqr, { gameId: getState().id });
 
     dispatch({ type: MARK, payload: newState });
     dispatch({ type: LOADING, payload: false });
@@ -75,7 +77,7 @@ export function undoMove() {
   return async (dispatch,getState) => {
     dispatch({ type: LOADING, payload: true });
 
-    const newState = await apiFetch('post','http://localhost:3000/api/undo', { gameId: getState().id });
+    const newState = await apiFetch('post','/api/undo', { gameId: getState().id });
 
     dispatch({ type: UNDO, payload: newState });
     dispatch({ type: LOADING, payload: false });
@@ -97,6 +99,8 @@ export function loading(val) {
 }
 
 async function apiFetch(method = 'get', url, body = {}) {
+  const apiHost = publicRuntimeConfig.apiHost;
+
   const req = {
     headers: {
       'Accept': 'application/json',
@@ -109,6 +113,6 @@ async function apiFetch(method = 'get', url, body = {}) {
     req.body = JSON.stringify(body);
   }
 
-  const result = await fetch(url,req);
+  const result = await fetch(apiHost + url,req);
   return await result.json();
 }
