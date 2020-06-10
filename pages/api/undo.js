@@ -1,5 +1,5 @@
 import Database from '../../db/database';
-import buildRepresentation from '../../helpers/board';
+import { buildRepresentation } from '../../helpers/board';
 
 export default async (req, res) => {
   const gameId = req.body.gameId;
