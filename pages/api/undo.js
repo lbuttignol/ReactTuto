@@ -5,7 +5,7 @@ export default async (req, res) => {
   const gameId = req.body.gameId;
   // search into database the game id
   const db = new Database();
-  const game = await db.get('SELECT * FROM Game WHERE id=?', gameId);
+  const game = await db.get('SELECT * FROM Game WHERE id = ?', gameId);
 
   if(!game) {
     return res.status(404).json({ message: 'Game not Found' });
@@ -33,6 +33,6 @@ export default async (req, res) => {
     stepNumber: stepNumber,
     xIsNext: xIsNext,
     winner : winner ,
-    newBoard: brd
-  })
+    newBoard: brd,
+  });
 }
