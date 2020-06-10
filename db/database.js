@@ -17,7 +17,7 @@ class Database{
           console.log('Error running sql ', sql, err);
           reject(err);
         } else {
-          resolve({ id: this.lastID })
+          resolve({ id: this.lastID });
         }
       });
     });

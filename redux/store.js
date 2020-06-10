@@ -1,21 +1,21 @@
-import { useMemo } from 'react'
-import { createStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
-import thunk from 'redux-thunk'
-import ticTacToe from './reducer'
+import { useMemo } from 'react';
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
+import ticTacToe from './reducer';
 
-let store
+let store;
 
 function initStore(initialState) {
   return createStore(
     ticTacToe,
     initialState,
     composeWithDevTools(applyMiddleware(thunk))
-  )
+  );
 }
 
 export const initializeStore = (preloadedState) => {
-  let _store = store ?? initStore(preloadedState)
+  let _store = store ?? initStore(preloadedState);
 
   // After navigating to a page with an initial Redux state, merge that state
   // with the current state in the store, and create a new store
@@ -33,10 +33,10 @@ export const initializeStore = (preloadedState) => {
   // Create the store once in the client
   if (!store) store = _store
 
-  return _store
-}
+  return _store;
+};
 
 export function useStore(initialState) {
-  const store = useMemo(() => initializeStore(initialState), [initialState])
-  return store
+  const store = useMemo(() => initializeStore(initialState), [initialState]);
+  return store;
 }

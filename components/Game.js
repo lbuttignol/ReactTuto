@@ -18,14 +18,14 @@ function Game () {
   }
 
   return (
-    <div className="game">
-      <div className="game-board">
+    <div className='game'>
+      <div className='game-board'>
         <Board
           squares={ current }
           onClick={ (i) => dispatch(doPlay(i)) }
         />
       </div>
-      <div className="game-info">
+      <div className='game-info'>
         <div>{ id }</div>
         <div>{ status }</div>
 

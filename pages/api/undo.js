@@ -1,5 +1,3 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { markSquare, jumpTo } from '../../redux/reducer';
 import Database from '../../db/database';
 
 export default async (req, res) => {
