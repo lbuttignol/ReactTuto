@@ -1,6 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { undoMove, 
-         createGame,
+import { createGame,
          gameCreated,
          doPlay,
          receivePlay } from '../redux/reducer';
@@ -56,12 +55,9 @@ function Game() {
         <div>{ aux[0] }</div>
 
         <div>
-          <button onClick={ () => dispatch(createGame(socket)) }>GENERATE GAME ID</button>
+          <button onClick={ () => dispatch(createGame(socket)) }>Generate Game</button>
         </div>
-        
-        <div>
-          <button onClick={ () => dispatch(undoMove()) }>Undo Move</button>
-        </div>
+
       </div>
     </div>
   );
