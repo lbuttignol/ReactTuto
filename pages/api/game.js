@@ -3,7 +3,6 @@ import Database from '../../db/database';
 
 export default async (req, res) => {
   const gameId = await createGame();
-
   res.status(200).json({ gameId: gameId });
 }
 
