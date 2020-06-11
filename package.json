@@ -22,7 +22,7 @@
     "webpack": "^4.43.0"
   },
   "scripts": {
-    "dev": "node ./db/createDb.js && next",
+    "dev": "node ./db/createDb.js && node ./server/server.js",
     "build": "next build",
     "start": "next start"
   },
