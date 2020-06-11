@@ -52,13 +52,17 @@ export default function reducer(state = initialState, action) {
 }
 
 // Action Creators
-export function generateGame() {
+export function createGame(socket) {
   return async (dispatch, getState) => {
     dispatch({ type: LOADING, payload: true });
-    
-    const newState = await apiFetch('get', '/api/game');
+    socket.emit('/api/game',{});
+  };
+};
 
-    dispatch({ type: START, payload: newState.gameId });
+export function gameCreated(gameId) {
+  return async (dispatch, getState) => {
+    console.log("gameId ", gameId);
+    dispatch({ type: START, payload: gameId });
     dispatch({ type: LOADING, payload: false });
   };
 };

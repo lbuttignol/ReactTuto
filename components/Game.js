@@ -1,5 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { undoMove, generateGame, doPlay } from '../redux/reducer';
+import { undoMove, 
+         createGame,
+         gameCreated,
+         doPlay } from '../redux/reducer';
 import { useEffect } from 'react';
 import io from 'socket.io-client';
 import Board from './Board';
@@ -19,6 +22,12 @@ function Game() {
       aux[0] = data.message;
       console.log(aux);
     });
+
+    socket.on('gameCreated', (newData) => {
+      console.log("Component get a gameCreated: ",newData);
+      dispatch(gameCreated(newData));
+    });
+
   });
 
   let status;
@@ -38,9 +47,10 @@ function Game() {
       <div className='game-info'>
         <div>{ id }</div>
         <div>{ status }</div>
+        <div>{ aux[0] }</div>
 
         <div>
-          <button onClick={ () => dispatch(generateGame()) }>GENERATE GAME ID</button>
+          <button onClick={ () => dispatch(createGame(socket)) }>GENERATE GAME ID</button>
         </div>
         
         <div>
