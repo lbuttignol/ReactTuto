@@ -1,10 +1,12 @@
 const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
-const schema = fs.readFileSync('./migrations/001-hello.sql').toString();
+require('dotenv').config();
+
+const schema = fs.readFileSync(process.env.DB_SCHEMA).toString();
 
 async function setup() {
   
-  const db = new sqlite3.Database('./mydb.sqlite', (err) => {
+  const db = new sqlite3.Database(process.env.DB_NAME, (err) => {
     if (err) {
       console.log('Could not connect to database', err);
     }
