@@ -1,5 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { undoMove, generateGame, doPlay } from '../redux/reducer';
+import { useEffect } from 'react';
+import io from 'socket.io-client';
 import Board from './Board';
 
 function Game() {
@@ -8,6 +10,16 @@ function Game() {
   const current = useSelector(state => state.current);
   const winner = useSelector(state =>state.winner);
   const xIsNext = useSelector(state => state.xIsNext);
+  const aux = [];
+  const socket = io();
+  
+  useEffect(() => {
+    socket.on('now', data => {
+      console.log('Get the message');
+      aux[0] = data.message;
+      console.log(aux);
+    });
+  });
 
   let status;
   status = 'Next player: ' + (xIsNext ? 'X' : 'O');
@@ -34,7 +46,6 @@ function Game() {
         <div>
           <button onClick={ () => dispatch(undoMove()) }>Undo Move</button>
         </div>
-   
       </div>
     </div>
   );
