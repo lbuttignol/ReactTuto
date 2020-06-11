@@ -55,7 +55,7 @@ export default function reducer(state = initialState, action) {
 export function createGame(socket) {
   return async (dispatch, getState) => {
     dispatch({ type: LOADING, payload: true });
-    socket.emit('/api/game',{});
+    socket.emit('/api/game', {});
   };
 };
 
@@ -67,12 +67,19 @@ export function gameCreated(gameId) {
   };
 };
 
-export function doPlay(sqr) {
+export function doPlay(socket, sqr) {
   return async (dispatch,getState) => {
     dispatch({ type: LOADING, payload: true });
+    socket.emit('/api/mark', { 
+      gameId: getState().id,
+      square: sqr,
+    });
+  };
+}
 
-    const newState = await apiFetch('post', '/api/mark/' + sqr, { gameId: getState().id });
-
+export function receivePlay(newState) {
+  return async (dispatch,getState) => {
+    console.log(newState);
     dispatch({ type: MARK, payload: newState });
     dispatch({ type: LOADING, payload: false });
   };

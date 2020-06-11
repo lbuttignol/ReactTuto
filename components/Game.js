@@ -2,7 +2,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { undoMove, 
          createGame,
          gameCreated,
-         doPlay } from '../redux/reducer';
+         doPlay,
+         receivePlay } from '../redux/reducer';
 import { useEffect } from 'react';
 import io from 'socket.io-client';
 import Board from './Board';
@@ -27,6 +28,11 @@ function Game() {
       console.log("Component get a gameCreated: ",newData);
       dispatch(gameCreated(newData));
     });
+  
+    socket.on('boxMarked', (newData) => {
+      console.log("Component get a gameCreated: ",newData);
+      dispatch(receivePlay(newData));
+    });
 
   });
 
@@ -41,7 +47,7 @@ function Game() {
       <div className='game-board'>
         <Board
           squares={ current }
-          onClick={ (i) => dispatch(doPlay(i)) }
+          onClick={ (i) => dispatch(doPlay(socket, i)) }
         />
       </div>
       <div className='game-info'>
