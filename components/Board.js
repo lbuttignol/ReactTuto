@@ -1,5 +1,6 @@
 export default function Board(props) {
   const renderSquare = (i) => {
+    
     return (
       <Square 
         value={ props.squares[i] }
@@ -30,6 +31,7 @@ export default function Board(props) {
 };
 
 function Square(props) {
+  
   return (
     <button 
       className='square' 

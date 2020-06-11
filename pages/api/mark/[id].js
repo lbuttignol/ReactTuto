@@ -13,19 +13,19 @@ export default async (req, res) => {
   const db = new Database();
   const game = await db.get('SELECT * FROM Game WHERE id=?', gameId);
 
-  if(!game){
+  if (!game) {
+    
     return res.status(404).json({ message: 'Game not Found' });
   }
 
   const board = await db.get('SELECT * FROM Board WHERE id = ?', game.current);
   const count = await db.all('SELECT count(*) as stepNumber FROM Board WHERE gameId = ?', [gameId]);
   const stepNumber = count[0].stepNumber;
-
   const squares = buildRepresentation(board);
-
   const winner = calculateWinner(squares);
   // Second value check if the cell is already marked
   if (winner || squares[id]) {
+    
     return res.status(200).json({
       winner: winner,
       stepNumber: stepNumber,

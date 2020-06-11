@@ -2,8 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { undoMove, generateGame, doPlay } from '../redux/reducer';
 import Board from './Board';
 
-function Game () {
-
+function Game() {
   const dispatch = useDispatch();
   const id = useSelector(state => state.id); 
   const current = useSelector(state => state.current);
@@ -11,7 +10,6 @@ function Game () {
   const xIsNext = useSelector(state => state.xIsNext);
 
   let status;
-
   status = 'Next player: ' + (xIsNext ? 'X' : 'O');
   if(winner) {
     status = 'Winner: ' + winner;

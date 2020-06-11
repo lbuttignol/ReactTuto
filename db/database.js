@@ -1,7 +1,7 @@
 import sqlite3 from 'sqlite3';
 import Promise from 'bluebird';
 
-class Database{  
+class Database {  
   constructor() {
     this.db = new sqlite3.Database(process.env.DB_NAME, (err) => {
       if (err) {
@@ -16,7 +16,8 @@ class Database{
         if (err) {
           console.log('Error running sql ', sql, err);
           reject(err);
-        } else {
+        } 
+        else {
           resolve({ id: this.lastID });
         }
       });
@@ -29,7 +30,8 @@ class Database{
         if (err) {
           console.log('Error running sql ', sql, err);
           reject(err);
-        } else {
+        } 
+        else {
           resolve(rows);
         }
       });
@@ -42,11 +44,12 @@ class Database{
         if (err) {
           console.log('Error running sql ', sql, err);
           reject(err);
-        } else {
+        } 
+        else {
           resolve(row);
         }
-      })
-    })
+      });
+    });
   }
 
   close() {
@@ -55,11 +58,12 @@ class Database{
         if (err){
           console.log('Error closing Database');
           reject(err);
-        }else{
+        }
+        else{
           resolve();
         }
-      })
-    })
+      });
+    });
   }
 }
 

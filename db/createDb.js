@@ -28,6 +28,7 @@ async function setup() {
   // Close the DB connection
   db.close(err => {
     if (err) {
+      
       return console.error(err.message);
     }
     console.log('Closed the database connection.');

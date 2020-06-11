@@ -57,6 +57,7 @@ export function generateGame() {
     dispatch({ type: LOADING, payload: true });
     
     const newState = await apiFetch('get', '/api/game');
+
     dispatch({ type: START, payload: newState.gameId });
     dispatch({ type: LOADING, payload: false });
   };
@@ -65,7 +66,7 @@ export function generateGame() {
 export function doPlay(sqr) {
   return async (dispatch,getState) => {
     dispatch({ type: LOADING, payload: true });
-    // if gameId == null create game
+
     const newState = await apiFetch('post', '/api/mark/' + sqr, { gameId: getState().id });
 
     dispatch({ type: MARK, payload: newState });
@@ -100,7 +101,6 @@ export function loading(val) {
 
 async function apiFetch(method = 'get', url, body = {}) {
   const apiHost = publicRuntimeConfig.apiHost;
-
   const req = {
     headers: {
       'Accept': 'application/json',
@@ -108,11 +108,10 @@ async function apiFetch(method = 'get', url, body = {}) {
     },
     method: method
   }
-  
   if(method != 'get') {
     req.body = JSON.stringify(body);
   }
-
   const result = await fetch(apiHost + url, req);
+  
   return await result.json();
 }
