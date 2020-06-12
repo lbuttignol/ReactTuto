@@ -15,14 +15,14 @@ const nextApp = next({ dev });
 const nextHandler = nextApp.getRequestHandler();
 
 io.on('connect', socket => {
-  socket.on('/api/game', (socket) => {
+  socket.on('createGame', (socket) => {
     createGame()
     .then(gameId => {
       io.emit('gameCreated', gameId);
     });
   });
 
-  socket.on('/api/mark', (appData) => {
+  socket.on('checkSquare', (appData) => {
     markGame(appData.gameId, appData.square)
     .then(newState => {
       if (newState) {
@@ -31,7 +31,7 @@ io.on('connect', socket => {
     });
   });
 
-  socket.on('/api/undo', (appData) => {
+  socket.on('undo', (appData) => {
     undoMove(appData.gameId)
     .then(newState => {
       if (newState) {
