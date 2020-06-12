@@ -7,17 +7,14 @@ import { createGame,
          undoMove } from '../helpers/game';
 
 const app = express();
-
 const server = http.createServer(app);
 const io = socketServer(server);
-
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });
 const nextHandler = nextApp.getRequestHandler();
 
 io.on('connect', socket => {
-  
   socket.on('/api/game', (socket) => {
     createGame()
     .then(gameId => {
