@@ -49,7 +49,7 @@ export default function reducer(state = initialState, action) {
   default: 
     return state;
   }
-}
+};
 
 // Action Creators
 export function createGame(socket) {
@@ -61,42 +61,41 @@ export function createGame(socket) {
 
 export function gameCreated(gameId) {
   return async (dispatch, getState) => {
-    console.log("gameId ", gameId);
     dispatch({ type: START, payload: gameId });
     dispatch({ type: LOADING, payload: false });
   };
 };
 
 export function doPlay(socket, sqr) {
-  return async (dispatch,getState) => {
+  return async (dispatch, getState) => {
     dispatch({ type: LOADING, payload: true });
     socket.emit('/api/mark', { 
       gameId: getState().id,
       square: sqr,
     });
   };
-}
+};
 
 export function receivePlay(newState) {
-  return async (dispatch,getState) => {
-    console.log(newState);
+  return async (dispatch, getState) => {
     dispatch({ type: MARK, payload: newState });
     dispatch({ type: LOADING, payload: false });
   };
-}
+};
 
-export function undoMove() {
-  return async (dispatch,getState) => {
+export function undoMove(socket) {
+  return async (dispatch, getState) => {
     dispatch({ type: LOADING, payload: true });
+    socket.emit('/api/undo', { gameId: getState().id });
+  };
+};
 
-    const newState = await apiFetch('post','/api/undo', { gameId: getState().id });
-
+export function updateState(newState) { 
+  return async (dispatch, getState) => {
     dispatch({ type: UNDO, payload: newState });
     dispatch({ type: LOADING, payload: false });
-  }
-}
-
-// add function load game
+  };
+};
 
 export function markSquare(sqr) {
   return { type: MARK, payload: sqr };
@@ -108,21 +107,4 @@ export function undo(val) {
 
 export function loading(val) {
   return { type: LOADING, payload: val };
-}
-
-async function apiFetch(method = 'get', url, body = {}) {
-  const apiHost = publicRuntimeConfig.apiHost;
-  const req = {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    method: method
-  }
-  if(method != 'get') {
-    req.body = JSON.stringify(body);
-  }
-  const result = await fetch(apiHost + url, req);
-  
-  return await result.json();
 }

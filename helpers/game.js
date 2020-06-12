@@ -15,14 +15,13 @@ export async function createGame() {
   // Insert Relationship
   await db.run(`UPDATE Game SET current = ? WHERE id = ?`, [boardId, gameId]);
   await db.close();
-  console.log("gameId",gameId);
+
   return gameId;
 };
 
 export async function markGame(gameId, square) {
   const db = new Database();
   const game = await db.get('SELECT * FROM Game WHERE id=?', gameId);
-
   if (!game) {
     
     return null;
@@ -74,4 +73,34 @@ export async function markGame(gameId, square) {
   };
 };
 
-
+export async function undoMove(gameId) {
+  const db = new Database();
+  const game = await db.get('SELECT * FROM Game WHERE id = ?', gameId);
+  
+  if(!game) {
+    
+    return null;
+  }
+  const boards = await db.all('SELECT * FROM Board WHERE gameId = ?', [gameId]);
+  
+  if (boards.length < 1) {
+    
+    return null;
+  }
+  const boardToDelete = game.current;
+  const newBoard      = boards[boards.length - 2];
+  const stepNumber    = boards.length - 1;
+  const xIsNext       = !game.xIsNext;
+  const winner        = null;
+  const brd = buildRepresentation(newBoard);
+  await db.run('UPDATE Game SET current = ? WHERE id = ?', [newBoard.id, gameId]);
+  await db.run('DELETE FROM Board WHERE id = ?', [boardToDelete]); 
+  await db.close();
+  
+  return {
+    stepNumber: stepNumber,
+    xIsNext: xIsNext,
+    winner : winner ,
+    newBoard: brd,
+  };
+}

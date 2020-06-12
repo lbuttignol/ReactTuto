@@ -3,7 +3,8 @@ import http from 'http';
 import socketServer from 'socket.io';
 import next from 'next';
 import { createGame, 
-         markGame } from '../helpers/game';
+         markGame,
+         undoMove } from '../helpers/game';
 
 const app = express();
 
@@ -18,21 +19,26 @@ const nextHandler = nextApp.getRequestHandler();
 io.on('connect', socket => {
   
   socket.on('/api/game', (socket) => {
-    console.log('Create new Game by socket');
     createGame()
     .then(gameId => {
-      console.log('gameCreated', gameId);
       io.emit('gameCreated', gameId);
     });
   });
 
   socket.on('/api/mark', (appData) => {
-    console.log('Mark box-appData', appData);
     markGame(appData.gameId, appData.square)
     .then(newState => {
-      console.log('boxMarked', newState);
       if (newState) {
         io.emit('boxMarked', newState);
+      }
+    });
+  });
+
+  socket.on('/api/undo', (appData) => {
+    undoMove(appData.gameId)
+    .then(newState => {
+      if (newState) {
+        io.emit('updateState', newState);
       }
     });
   });
