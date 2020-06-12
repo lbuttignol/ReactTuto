@@ -17,17 +17,50 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "redux-undo": "^1.0.1",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
     "sqlite3": "^4.2.0",
     "uuid": "^8.1.0",
     "webpack": "^4.43.0"
   },
   "scripts": {
-    "dev": "node ./db/createDb.js && next",
-    "build": "next build",
-    "start": "next start"
+    "dev": "node ./db/createDb.js && NODE_ENV=development nodemon ./server/server.js --exec babel-node --presets @babel/preset-env --watch server/server.js",
+    "build": "yarn build:next && yarn build:server",
+    "build:next": "next build",
+    "build:server": "NODE_ENV=production babel server.js --out-dir .next/dist",
+    "start": "NODE_ENV=production node .next/dist/server.js"
+  },
+  "babel": {
+    "env": {
+      "development": {
+        "presets": [
+          "next/babel"
+        ]
+      },
+      "production": {
+        "presets": [
+          "next/babel",
+          [
+            "@babel/env",
+            {
+              "targets": {
+                "node": "8"
+              }
+            }
+          ]
+        ]
+      }
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.44",
+    "@babel/core": "^7.0.0-beta.44",
+    "@babel/node": "^7.0.0-beta.44",
+    "@babel/preset-env": "^7.0.0-beta.44",
+    "nodemon": "^1.17.5"
   },
   "browserslist": {
     "production": [
